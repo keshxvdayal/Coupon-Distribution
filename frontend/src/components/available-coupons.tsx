@@ -37,7 +37,7 @@ export function AvailableCoupons({ coupons, onClaimCoupon, isLoading }: Availabl
       <div className="flex flex-col items-center justify-center py-8 text-center">
         <Ticket className="h-12 w-12 text-gray-300 dark:text-gray-600 mb-3" />
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No Available Coupons</h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400">You've claimed all available coupons.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">You&lsquo;ve claimed all available coupons.</p>
       </div>
     )
   }
