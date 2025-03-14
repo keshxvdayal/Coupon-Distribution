@@ -2,8 +2,12 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3001" })); // Allow frontend
+app.use(cors({ origin: "https://coupon-distribution-gules.vercel.app/" })); // Allow frontend
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(`🔍 Received ${req.method} request to ${req.url}`);
+    next();
+});
 
 // Trust proxy to get correct IP
 app.set("trust proxy", true);
