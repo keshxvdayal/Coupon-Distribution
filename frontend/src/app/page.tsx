@@ -27,30 +27,29 @@ export default function Home() {
     fetchClaimedCoupons()
   }, [])
 
-  const claimCoupon = async (coupon: string) => {
-    try {
-      console.log("🚀 Sending POST request with:", { coupon });
+  
 
-      const response = await fetch(`${API_URL}/claim`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+  async function claimCoupon(coupon: string): Promise<void> {
+    try {
+      const response = await fetch('/api/claim-coupon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ coupon }),
       });
-
-      const responseData = await response.json();
-      console.log("🎯 Server Response:", responseData);
-
+  
       if (!response.ok) {
-        alert(responseData.error || "Failed to claim coupon.");
-        return;
+        throw new Error(`Error: ${response.statusText}`);
       }
-
-      setClaimedCoupons((prev) => [...prev, coupon]);
-      alert(`🎉 You successfully claimed: ${coupon}`);
+  
+      const data = await response.json();
+      console.log('Coupon claimed successfully:', data);
     } catch (error) {
-      console.error("🚨 Error claiming coupon:", error);
+      console.error('Error claiming coupon:', error);
+      throw error;
     }
-  };
+  }
 
   return (
     <CouponDashboard

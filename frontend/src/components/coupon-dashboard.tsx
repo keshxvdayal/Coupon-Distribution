@@ -32,11 +32,19 @@ export function CouponDashboard({ coupons, claimedCoupons, claimCoupon, isLoadin
   const { toast } = useToast()
 
   const handleClaimCoupon = async (coupon: string) => {
-    await claimCoupon(coupon)
-    toast("Coupon Claimed", {
-      description: `You've successfully claimed ${coupon}`,
-    })
-  }
+    if (claimedCoupons.includes(coupon)) {
+      toast({
+        title: "Already Claimed!",
+        description: `You've already claimed ${coupon}.`,
+        variant: "destructive",
+      });
+      return;
+    }
+  
+    await claimCoupon(coupon);
+    toast({ title: "Coupon Claimed", description: `You've successfully claimed ${coupon}.` });
+  };
+  
 
   const availableCoupons = coupons.filter((c) => !claimedCoupons.includes(c))
 
