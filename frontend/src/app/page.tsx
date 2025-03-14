@@ -107,28 +107,29 @@ export default function Home() {
 
   const claimCoupon = async (coupon: string) => {
     try {
-      console.log("🚀 Sending POST request with:", { coupon })
-
-      const response = await fetch("https://backend-dvszsqaps-keshxvdayals-projects.vercel.app/claim", {
+      console.log("🚀 Sending POST request with:", { coupon });
+  
+      const response = await fetch("https://backend-dvszsqaps-keshxvdayals-projects.vercel.app/api/claim", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coupon }),
-      })
-
-      const responseData = await response.text()
-      console.log("🎯 Server Response:", responseData)
-
+      });
+  
+      const responseData = await response.json();
+      console.log("🎯 Server Response:", responseData);
+  
       if (!response.ok) {
-        alert(responseData)
-        return
+        alert(responseData.error || "Failed to claim coupon.");
+        return;
       }
-
-      setClaimedCoupons((prev) => [...prev, coupon])
-      alert(`🎉 You successfully claimed: ${coupon}`)
+  
+      setClaimedCoupons((prev) => [...prev, coupon]);
+      alert(`🎉 You successfully claimed: ${coupon}`);
     } catch (error) {
-      console.error("🚨 Error claiming coupon:", error)
+      console.error("🚨 Error claiming coupon:", error);
     }
-  }
+  };
+  
 
   return (
     <CouponDashboard
