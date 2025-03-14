@@ -90,7 +90,7 @@ export default function Home() {
     const fetchClaimedCoupons = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch("http://localhost:3000/claimed-coupons")
+        const response = await fetch("https://backend-dvszsqaps-keshxvdayals-projects.vercel.app/claimed-coupons")
         if (response.ok) {
           const data = await response.json()
           setClaimedCoupons(data.claimedCoupons || [])
@@ -109,7 +109,7 @@ export default function Home() {
     try {
       console.log("🚀 Sending POST request with:", { coupon })
 
-      const response = await fetch("http://localhost:3000/claim", {
+      const response = await fetch("https://backend-dvszsqaps-keshxvdayals-projects.vercel.app/claim", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coupon }),
