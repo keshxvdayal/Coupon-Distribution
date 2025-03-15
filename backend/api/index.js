@@ -3,7 +3,12 @@ const cors = require("cors");
 const serverless = require("serverless-http");
 
 const app = express();
-app.use(cors({ origin: "https://coupon-distribution-gules.vercel.app/" }));
+app.use(cors({
+    origin: "https://coupon-distribution-gules.vercel.app/",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  }));
+  
 app.use(express.json());
 app.set("trust proxy", true);
 
