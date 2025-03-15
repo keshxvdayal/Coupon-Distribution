@@ -4,13 +4,25 @@ const serverless = require("serverless-http");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "*", // Allow all origins for local testing
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+const allowedOrigins = [
+    "https://coupon-distribution-gules.vercel.app",
+    "http://localhost:3000", // ✅ Allow localhost for local testing
+  ];
+  
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      methods: ["GET", "POST"],
+      allowedHeaders: ["Content-Type"],
+    })
+  );
+  
 
 app.use(express.json());
 app.set("trust proxy", true);
@@ -58,7 +70,7 @@ app.get("/claimed-coupons", (req, res) => {
 
 // ✅ Run Express Locally
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
     console.log(`🚀 Backend running on http://localhost:${PORT}`);
   });
