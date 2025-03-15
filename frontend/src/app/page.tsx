@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { CouponDashboard } from "@/components/coupon-dashboard";
 
-const API_URL = "https://backend-keshxvdayals-projects.vercel.app"; // ✅ Backend running on 3000
+const API_URL = "https://backend-4u6byxcjq-keshxvdayals-projects.vercel.app"; // ✅ Backend running on 3000
 
 export default function Home() {
   const [coupons] = useState<string[]>(["Coupon1", "Coupon2", "Coupon3"]);
