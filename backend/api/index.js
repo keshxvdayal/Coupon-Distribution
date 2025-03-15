@@ -6,20 +6,21 @@ const app = express();
 
 const allowedOrigins = [
     "https://coupon-distribution-gules.vercel.app",
-    "http://localhost:3000", // ✅ Allow localhost for local testing
+    "http://localhost:3000"
   ];
   
   app.use(
     cors({
       origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
+          callback(null, origin || "*"); // ✅ Allow requests from valid origins
         } else {
           callback(new Error("Not allowed by CORS"));
         }
       },
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST", "OPTIONS"], // ✅ Ensure OPTIONS method is allowed
       allowedHeaders: ["Content-Type"],
+      credentials: true, // ✅ Allow cookies/auth headers if needed
     })
   );
   
