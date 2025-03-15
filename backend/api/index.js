@@ -3,43 +3,66 @@ const cors = require("cors");
 const serverless = require("serverless-http");
 
 const app = express();
-app.use(cors({
-    origin: "https://coupon-distribution-gules.vercel.app/",
+
+app.use(
+  cors({
+    origin: "https://coupon-distribution-gules.vercel.app", // Allow all origins for local testing
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
-  }));
-  
+  })
+);
+
 app.use(express.json());
 app.set("trust proxy", true);
 
 let ipClaims = {};
 
 const getClientIP = (req) => {
-    return req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+  const ip =
+    req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+  console.log(`Client IP: ${ip}`); // Log the IP for debugging
+  return ip;
 };
 
+// 🔹 Handle Coupon Claim
 app.post("/claim", (req, res) => {
-    const userIP = getClientIP(req);
+  console.log("Received claim request:", req.body);
 
-    if (!req.body?.coupon) {
-        return res.status(400).json({ error: "Invalid coupon." });
-    }
+  const userIP = getClientIP(req);
 
-    const { coupon } = req.body;
-    ipClaims[userIP] = ipClaims[userIP] || {};
+  if (!req.body?.coupon) {
+    console.error("Error: Invalid coupon.");
+    return res.status(400).json({ error: "Invalid coupon." });
+  }
 
-    if (ipClaims[userIP][coupon]) {
-        return res.status(400).json({ error: "You have already claimed this coupon." });
-    }
+  const { coupon } = req.body;
+  ipClaims[userIP] = ipClaims[userIP] || {};
 
-    ipClaims[userIP][coupon] = Date.now();
-    return res.json({ message: "Coupon claimed successfully!" });
+  if (ipClaims[userIP][coupon]) {
+    console.warn(`User ${userIP} already claimed ${coupon}`);
+    return res.status(400).json({ error: "You have already claimed this coupon." });
+  }
+
+  ipClaims[userIP][coupon] = Date.now();
+  console.log(`Coupon ${coupon} claimed by ${userIP}`);
+  return res.json({ message: "Coupon claimed successfully!" });
 });
 
+// 🔹 Fetch Claimed Coupons
 app.get("/claimed-coupons", (req, res) => {
-    const userIP = getClientIP(req);
-    return res.json({ claimedCoupons: Object.keys(ipClaims[userIP] || {}) });
+  const userIP = getClientIP(req);
+  console.log(`Fetching claimed coupons for ${userIP}`);
+
+  return res.json({ claimedCoupons: Object.keys(ipClaims[userIP] || {}) });
 });
+
+// ✅ Run Express Locally
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Backend running on http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
 module.exports.handler = serverless(app);
