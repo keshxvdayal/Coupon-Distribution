@@ -18,6 +18,7 @@ export default function Home() {
       try {
         console.log("Fetching claimed coupons from API...");
         const response = await fetch(`${API_URL}/claimed-coupons`);
+        
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
         }

@@ -6,7 +6,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://coupon-distribution-gules.vercel.app", // Allow all origins for local testing
+    origin: "*", // Allow all origins for local testing
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
