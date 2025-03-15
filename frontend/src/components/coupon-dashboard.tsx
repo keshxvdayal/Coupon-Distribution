@@ -29,22 +29,18 @@ interface CouponDashboardProps {
 
 export function CouponDashboard({ coupons, claimedCoupons, claimCoupon, isLoading }: CouponDashboardProps) {
   // const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  
   const { toast } = useToast()
 
   const handleClaimCoupon = async (coupon: string) => {
     if (claimedCoupons.includes(coupon)) {
-      toast({
-        title: "Already Claimed!",
-        description: `You've already claimed ${coupon}.`,
-        variant: "destructive",
-      });
+      toast.error(`Already Claimed! You've already claimed ${coupon}.`);
       return;
     }
-  
+
     await claimCoupon(coupon);
-    toast({ title: "Coupon Claimed", description: `You've successfully claimed ${coupon}.` });
+    toast.success(`Coupon Claimed! You've successfully claimed ${coupon}.`);
   };
-  
 
   const availableCoupons = coupons.filter((c) => !claimedCoupons.includes(c))
 

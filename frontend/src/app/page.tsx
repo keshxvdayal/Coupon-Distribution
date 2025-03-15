@@ -31,7 +31,7 @@ export default function Home() {
 
   async function claimCoupon(coupon: string): Promise<void> {
     try {
-      const response = await fetch('/api/claim-coupon', {
+      const response = await fetch(`${API_URL}/claim`, {  // Fix URL here
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,9 +47,10 @@ export default function Home() {
       console.log('Coupon claimed successfully:', data);
     } catch (error) {
       console.error('Error claiming coupon:', error);
-      throw error;
     }
   }
+  
+
 
   return (
     <CouponDashboard
